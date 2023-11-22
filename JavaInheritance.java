@@ -1,79 +1,150 @@
-// TOPIC : Implementation of inheritance in java using domain - SocialMedia application
+// TOPIC : Implementation of inheritance in java using domain - SocialMedia application - HELLO APPLICATION.
 // AUTHOR : Suvajit Karmakar
 // DATA : 22.11.23
 // LABEXERCISE : 3
 
+
 abstract class SocialMediaUser {
-    String username;
+    private String username;
+    private String fullName;
 
-    SocialMediaUser(String username) {
+    public SocialMediaUser(String username, String fullName) {
         this.username = username;
+        this.fullName = fullName;
     }
 
-    abstract void post(String content);
-
-    void likePost() {
-        System.out.println(username + " : LIKED THE POST.");
+    public void displayProfile() {
+        System.out.println("USERNAME -> " + getUserName());
+        System.out.println("FULLNAME ->  " + fullName);
     }
+
+    public String getUserName() {
+        return username;
+    }
+
+    public abstract void postContent(String content);
 }
 
 
-class RegularUser extends SocialMediaUser {
-    RegularUser(String username) {
-        super(username);
+class Influencer extends SocialMediaUser {
+    private int followers;
+
+    public Influencer(String username, String fullName, int followers) {
+        super(username, fullName);
+        this.followers = followers;
     }
 
     
-    void post(String content) {
-        System.out.println(username + " POSTED : " + content);
-    }
-}
-
-
-class AdminUser extends SocialMediaUser {
-    AdminUser(String username) {
-        super(username);
+    @Override
+    public void postContent(String content) {
+        System.out.println("INFLUENCER " + super.getUserName() + " POSTED : " + content);
     }
 
     
-    void post(String content) {
-        System.out.println(username + " (Admin) POSTED : " + content);
+    @Override
+    public String getUserName() {
+        return "INFLUENCER -> " + super.getUserName();
     }
 
     
-    void deletePost() {
-        System.out.println(username + " : DELETED A POST.");
+    public void promote() {
+        System.out.println(super.getUserName() + " IS PROMOTING THEIR CONTENT TO ->  " + followers + " FOLLOWERS.");
     }
 }
 
 
-final class FinalPost {
-    private String content;
+final class RegularUser extends SocialMediaUser {
+    private int friends;
 
-    FinalPost(String content) {
-        this.content = content;
+    public RegularUser(String username, String fullName, int friends) {
+        super(username, fullName);
+        this.friends = friends;
     }
 
-    void display() {
-        System.out.println("POST: " + content);
+    
+    @Override
+    public void postContent(String content) {
+        System.out.println("hloUSER " + super.getUserName() + " POSTED : " + content);
+    }
+
+    
+    public void connectWithFriends() {
+        System.out.println(super.getUserName() + " IS CONNECTING WITH " + friends + " FRIENDS.");
     }
 }
 
+
+class SocialMediaAdmin extends SocialMediaUser {
+    private String adminRole;
+
+    public SocialMediaAdmin(String username, String fullName, String adminRole) {
+        super(username, fullName);
+        this.adminRole = adminRole;
+    }
+
+    
+    @Override
+    public void postContent(String content) {
+        System.out.println("hloADMIN " + super.getUserName() + " POSTED: " + content);
+    }
+
+    
+    @Override
+    public String getUserName() {
+        return "hloADMIN -> " + super.getUserName();
+    }
+
+    
+    public void manageContent() {
+        System.out.println(super.getUserName() + " IS MANAGING HELLO APPLICATION AS IN " + adminRole);
+    }
+}
+
+class MegaInfluencer extends Influencer {
+    private String agency;
+
+    public MegaInfluencer(String username, String fullName, int followers, String agency) {
+        super(username, fullName, followers);
+        this.agency = agency;
+    }
+
+    
+    @Override
+    public void promote() {
+        System.out.println(getUserName() + " IS IN PROMOTION ZONE WITH THEIR AGENCY ->  " + agency);
+    }
+}
 
 public class JavaInheritance {
     public static void main(String[] args) {
-        RegularUser regularUser = new RegularUser("SUVAJITKARMAKAR");
-        AdminUser adminUser = new AdminUser("@hloSuvajit");
+        //SINGLE INHERITANCE
+        Influencer influencer = new Influencer("hloMarkZugerburg", "MarkZugerburg", 600000);
+        influencer.displayProfile();
+        influencer.postContent("CHECK OUT MY LATEST POST!");
+        influencer.promote();
 
-        regularUser.post("HEY THERE! I AM LEARNING JAVA");
-        adminUser.post("IMPORTANT ANNOUNCEMENT");
+        System.out.println();
 
-        adminUser.deletePost(); // Only available in AdminUser
+        //MULTILEVEL INHERITANCE
+        MegaInfluencer megaInfluencer = new MegaInfluencer("hloHenryCavill", "HenryCavill", 1000000, "Jonathan dMac");
+        megaInfluencer.displayProfile();
+        megaInfluencer.postContent("REVISIT MY ACCOUNCEMENT!");
+        megaInfluencer.promote();
 
-        regularUser.likePost();
-        adminUser.likePost();
+        System.out.println();
 
-        FinalPost finalPost = new FinalPost("THIS IS THE FINAL POST.");
-        finalPost.display();
+        //HIRARCHICAL INHERITANCE
+        SocialMediaAdmin admin = new SocialMediaAdmin("hloSuvajitKarmakar", "SuvajitKarmakar", "Application manager");
+        admin.displayProfile();
+        admin.postContent("CHECK OUT THE LATEST UPDATES IN HELLO!");
+        admin.manageContent();
+
+        System.out.println();
+
+        //FINAL CLASS
+        RegularUser regularUser = new RegularUser("hloSalini", "SaliniSatpati", 1367);
+        regularUser.displayProfile();
+        regularUser.postContent("JUST MY THOUGHTS AND A PICTURE !");
+        regularUser.connectWithFriends();
     }
 }
